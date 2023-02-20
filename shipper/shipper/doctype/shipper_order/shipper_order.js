@@ -13,11 +13,11 @@ frappe.ui.form.on('Shipper Order', {
     // add click event listener to searchLogisticButton
     searchLogisticButton.on('click', function () {
       // searchLogisticButton.prop('disabled', true)
-      const isValidated = validate(frm)
+      // const isValidated = validate(frm)
 
-      if (isValidated) {
-        return frm.events.fetch_shipping_rates(frm)
-      }
+      // if (isValidated) {
+      return frm.events.fetch_shipping_rates(frm)
+      // }
 
       // searchLogisticButton.prop('disabled', false)
     })
@@ -38,6 +38,10 @@ frappe.ui.form.on('Shipper Order', {
 
   fetch_shipping_rates: async function (frm) {
     console.log('Fetching shipping rates...')
+
+    select_from_available_services(frm, [])
+
+    return
 
     Promise.all([
       await frm.events.fetch_address(frm, 'origin_address'),
@@ -118,16 +122,14 @@ function select_from_available_services(frm, available_services) {
       }
     ],
     on_page_show: () => {
-      console.log('on_page_show')
-      // new Vue({
-      //   el: dialog.get_field("available_services").$wrapper.get(0),
-      //   render: h =>
-      //     h(ConfigureColumnsVue, {
-      //       props: {
-      //         df: this.df
-      //       }
-      //     })
-      // });
+      frappe.require('shipper.bundle.js').then(() => {
+        new frappe.ui.ShippingRatesList({
+          // wrapper: dialog.get_field('available_services').$wrapper.get(0)
+          wrapper: '#shipping-rates',
+          frm: frm,
+          rates: []
+        })
+      })
     }
   })
 
@@ -267,23 +269,3 @@ const validate = function (frm) {
 
   return run()
 }
-
-// Vue
-
-Vue.component('shipping-list', {
-  data: () => ({
-    name: 'Aslam'
-  }),
-  template: '<div>{{ name }}</div>'
-})
-
-const shippingRates = new Vue({
-  el: '#shipping-rates',
-  data() {
-    return {
-      name: 'Aslam'
-    }
-  }
-})
-
-console.log(shippingRates)
