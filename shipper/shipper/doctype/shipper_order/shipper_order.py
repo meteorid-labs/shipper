@@ -93,6 +93,8 @@ def fetch_shipping_rates(destinationAreaId, destinationLat, destinationLng, heig
 	originAreaId, originLat, originLng, validToOrder, 
 	weight, width):
 
+	pricings = []
+
 	payload = {
 		'cod': False,
 		'destination': {
@@ -116,12 +118,12 @@ def fetch_shipping_rates(destinationAreaId, destinationLat, destinationLng, heig
 
 	response = ShipperUtils().pricing_dosmestic(data=payload)
 
-	frappe.throw(response.text)
-
 	result = frappe._dict(response.json())
 
 	if result.metadata.get('http_status_code') == 200:
-		return result.data
-		return {'message': result.data.get('pricings')}
+		for pricing in result.data.get('pricings'):
+			pricings.append({
+				**pricing,
+			})
 
-	return {'message': []}
+	return pricings

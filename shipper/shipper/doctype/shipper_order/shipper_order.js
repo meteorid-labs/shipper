@@ -68,7 +68,6 @@ frappe.ui.form.on('Shipper Order', {
         freeze_message: __('Fetching Shipping Rates'),
         args: args,
         callback: function (r) {
-          console.log('Callback', r.message)
           // searchLogisticButton.prop('disabled', false)
 
           if (r.message && r.message.length) {
@@ -117,7 +116,19 @@ function select_from_available_services(frm, available_services) {
         fieldname: 'available_services',
         label: __('Available Services')
       }
-    ]
+    ],
+    on_page_show: () => {
+      console.log('on_page_show')
+      // new Vue({
+      //   el: dialog.get_field("available_services").$wrapper.get(0),
+      //   render: h =>
+      //     h(ConfigureColumnsVue, {
+      //       props: {
+      //         df: this.df
+      //       }
+      //     })
+      // });
+    }
   })
 
   frm.render_available_services(dialog, headers, arranged_services)
@@ -256,3 +267,23 @@ const validate = function (frm) {
 
   return run()
 }
+
+// Vue
+
+Vue.component('shipping-list', {
+  data: () => ({
+    name: 'Aslam'
+  }),
+  template: '<div>{{ name }}</div>'
+})
+
+const shippingRates = new Vue({
+  el: '#shipping-rates',
+  data() {
+    return {
+      name: 'Aslam'
+    }
+  }
+})
+
+console.log(shippingRates)
