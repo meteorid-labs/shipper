@@ -1,0 +1,128 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-02-14 12:27:08.258075",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "full_name",
+  "column_break_0xtov",
+  "phone_number",
+  "section_break_vtw1m",
+  "label",
+  "address",
+  "suburb",
+  "section_break_hdn4d",
+  "area",
+  "column_break_d7zjw",
+  "postcode",
+  "section_break_uglew",
+  "notes",
+  "meta_address"
+ ],
+ "fields": [
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nama",
+   "reqd": 1
+  },
+  {
+   "fieldname": "phone_number",
+   "fieldtype": "Phone",
+   "in_list_view": 1,
+   "label": "Nomor HP",
+   "reqd": 1
+  },
+  {
+   "fieldname": "label",
+   "fieldtype": "Data",
+   "label": "Label alamat"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Alamat lengkap",
+   "reqd": 1
+  },
+  {
+   "description": "Masukan keyword pencarian kota/kecamatan",
+   "fieldname": "suburb",
+   "fieldtype": "Autocomplete",
+   "in_list_view": 1,
+   "label": "Kota dan kecamatan",
+   "reqd": 1
+  },
+  {
+   "fieldname": "area",
+   "fieldtype": "Select",
+   "label": "kelurahan",
+   "reqd": 1
+  },
+  {
+   "fieldname": "postcode",
+   "fieldtype": "Data",
+   "label": "Kodepos"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Catatan tambahan"
+  },
+  {
+   "fieldname": "meta_address",
+   "fieldtype": "JSON",
+   "hidden": 1,
+   "label": "meta_address"
+  },
+  {
+   "fieldname": "column_break_0xtov",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_vtw1m",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_d7zjw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_hdn4d",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_uglew",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-02-14 16:30:11.534949",
+ "modified_by": "Administrator",
+ "module": "Shipper",
+ "name": "Shipper Address",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

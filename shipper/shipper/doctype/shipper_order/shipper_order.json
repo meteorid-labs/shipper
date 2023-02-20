@@ -1,0 +1,266 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2023-02-10 11:15:02.751561",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "data_shipment_section",
+  "coverage",
+  "section_break_xhbuu",
+  "origin_address",
+  "column_break_x2bcj",
+  "destination_address",
+  "volume_barang_section",
+  "item_type",
+  "column_break_z5nvn",
+  "weight",
+  "section_break_3mtil",
+  "length",
+  "column_break_gfnmo",
+  "width",
+  "column_break_2k1rr",
+  "height",
+  "section_break_o5y1v",
+  "item_value",
+  "column_break_yyvgk",
+  "external_id",
+  "pilih_kurir_logistik_section",
+  "kurir",
+  "cari_kurir_logistik",
+  "creation_date",
+  "order_id",
+  "origin",
+  "destination",
+  "courier",
+  "ongkir",
+  "status",
+  "currency",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "order_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "ID Pesanan"
+  },
+  {
+   "fieldname": "creation_date",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Tanggal"
+  },
+  {
+   "fieldname": "origin",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Asal"
+  },
+  {
+   "fieldname": "destination",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Tujuan"
+  },
+  {
+   "fieldname": "courier",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Kurir"
+  },
+  {
+   "fieldname": "ongkir",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Ongkir",
+   "options": "currency"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "status"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "coverage",
+   "fieldtype": "Select",
+   "label": "Coverage",
+   "options": "domestic\ninternational",
+   "reqd": 1
+  },
+  {
+   "fieldname": "origin_address",
+   "fieldtype": "Link",
+   "label": "Alamat pengirim",
+   "options": "Shipper Address",
+   "reqd": 1,
+   "width": "100"
+  },
+  {
+   "fieldname": "destination_address",
+   "fieldtype": "Link",
+   "label": "Alamat penerima",
+   "options": "Shipper Address",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_z5nvn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_xhbuu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "item_type",
+   "fieldtype": "Link",
+   "label": "Jeni paket",
+   "options": "Shipper Item Types",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_x2bcj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "weight",
+   "fieldtype": "Float",
+   "label": "Berat paket",
+   "precision": "0",
+   "reqd": 1
+  },
+  {
+   "fieldname": "volume_barang_section",
+   "fieldtype": "Section Break",
+   "label": "Detail paket"
+  },
+  {
+   "fieldname": "column_break_yyvgk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Masukan external ID (jika ada)",
+   "fieldname": "external_id",
+   "fieldtype": "Data",
+   "label": "External ID"
+  },
+  {
+   "fieldname": "section_break_o5y1v",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Shipper Order",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_gfnmo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_2k1rr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_3mtil",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "data_shipment_section",
+   "fieldtype": "Section Break",
+   "label": "Data shipment"
+  },
+  {
+   "fieldname": "pilih_kurir_logistik_section",
+   "fieldtype": "Section Break",
+   "label": "Pilih kurir logistik"
+  },
+  {
+   "description": "To choose this field please click button Fetch Shipping Rates",
+   "fieldname": "kurir",
+   "fieldtype": "Data",
+   "label": "Kurir",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cari_kurir_logistik",
+   "fieldtype": "Button",
+   "label": "Fetch Shipping Rates"
+  },
+  {
+   "fieldname": "length",
+   "fieldtype": "Float",
+   "label": "Panjang",
+   "precision": "0",
+   "reqd": 1,
+   "width": "33,333333"
+  },
+  {
+   "fieldname": "width",
+   "fieldtype": "Float",
+   "label": "Lebar",
+   "precision": "0",
+   "reqd": 1
+  },
+  {
+   "fieldname": "height",
+   "fieldtype": "Float",
+   "label": "Tinggi",
+   "precision": "0",
+   "reqd": 1
+  },
+  {
+   "fieldname": "item_value",
+   "fieldtype": "Currency",
+   "label": "Nilai barang",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_virtual": 1,
+ "links": [],
+ "modified": "2023-02-20 15:32:23.507867",
+ "modified_by": "Administrator",
+ "module": "Shipper",
+ "name": "Shipper Order",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
