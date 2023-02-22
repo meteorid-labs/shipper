@@ -39,10 +39,6 @@ frappe.ui.form.on('Shipper Order', {
   fetch_shipping_rates: async function (frm) {
     console.log('Fetching shipping rates...')
 
-    select_from_available_services(frm, [])
-
-    return
-
     Promise.all([
       await frm.events.fetch_address(frm, 'origin_address'),
       await frm.events.fetch_address(frm, 'destination_address')
@@ -72,6 +68,7 @@ frappe.ui.form.on('Shipper Order', {
         freeze_message: __('Fetching Shipping Rates'),
         args: args,
         callback: function (r) {
+          console.log('r', r)
           // searchLogisticButton.prop('disabled', false)
 
           if (r.message && r.message.length) {
@@ -97,17 +94,15 @@ function select_from_available_services(frm, available_services) {
     ''
   ]
 
-  const arranged_services = { preferred_services: [], other_services: [] }
-
   frm.render_available_services = function (
     dialog,
     headers,
-    arranged_services
+    available_services
   ) {
     dialog.fields_dict.available_services.$wrapper.html(
       frappe.render_template('shipper_service_selector', {
         header_columns: headers,
-        data: arranged_services
+        data: available_services
       })
     )
   }
@@ -124,29 +119,16 @@ function select_from_available_services(frm, available_services) {
     on_page_show: () => {
       frappe.require('shipper.bundle.js').then(() => {
         new frappe.ui.ShippingRatesList({
-          // wrapper: dialog.get_field('available_services').$wrapper.get(0)
           wrapper: '#shipping-rates',
           frm: frm,
-          rates: []
+          pricings: available_services
         })
       })
     }
   })
 
-  frm.render_available_services(dialog, headers, arranged_services)
+  frm.render_available_services(dialog, headers, available_services)
 
-  dialog.$body.on('click', '.btn', function () {
-    let service_type = $(this).attr('data-type')
-    let service_index = cint($(this).attr('id').split('-')[2])
-    let service_data = arranged_services[service_type][service_index]
-    frm.select_row(service_data)
-  })
-
-  frm.select_row = function (service_data) {
-    // on selecting a row
-
-    dialog.hide()
-  }
   dialog.show()
 }
 

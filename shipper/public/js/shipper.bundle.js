@@ -1,17 +1,17 @@
 import ShippingRatesListComponent from './ShippingRatesList.vue'
 
 class ShippingRatesList {
-  constructor({ wrapper, frm, rates }) {
+  constructor({ wrapper, frm, pricings }) {
     this.$wrapper = $(wrapper)
     this.frm = frm
-    this.rates = rates
+    this.pricings = pricings
 
     let $vm = new Vue({
       el: this.$wrapper.get(0),
       render: (h) =>
         h(ShippingRatesListComponent, {
           props: {
-            rates: this.rates,
+            pricings: this.pricings,
             frm: this.frm
           }
         })
