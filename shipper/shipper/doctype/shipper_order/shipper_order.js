@@ -13,11 +13,11 @@ frappe.ui.form.on('Shipper Order', {
     // add click event listener to searchLogisticButton
     searchLogisticButton.on('click', function () {
       // searchLogisticButton.prop('disabled', true)
-      const isValidated = validate(frm)
+      // const isValidated = validate(frm)
 
-      if (isValidated) {
-        return frm.events.fetch_shipping_rates(frm)
-      }
+      // if (isValidated) {
+      return frm.events.fetch_shipping_rates(frm)
+      // }
 
       // searchLogisticButton.prop('disabled', false)
     })
@@ -68,6 +68,7 @@ frappe.ui.form.on('Shipper Order', {
         freeze_message: __('Fetching Shipping Rates'),
         args: args,
         callback: function (r) {
+          console.log('r', r)
           // searchLogisticButton.prop('disabled', false)
 
           if (r.message && r.message.length) {
@@ -93,17 +94,15 @@ function select_from_available_services(frm, available_services) {
     ''
   ]
 
-  const arranged_services = { preferred_services: [], other_services: [] }
-
   frm.render_available_services = function (
     dialog,
     headers,
-    arranged_services
+    available_services
   ) {
     dialog.fields_dict.available_services.$wrapper.html(
       frappe.render_template('shipper_service_selector', {
         header_columns: headers,
-        data: arranged_services
+        data: available_services
       })
     )
   }
@@ -118,33 +117,18 @@ function select_from_available_services(frm, available_services) {
       }
     ],
     on_page_show: () => {
-      console.log('on_page_show')
-      // new Vue({
-      //   el: dialog.get_field("available_services").$wrapper.get(0),
-      //   render: h =>
-      //     h(ConfigureColumnsVue, {
-      //       props: {
-      //         df: this.df
-      //       }
-      //     })
-      // });
+      frappe.require('shipper.bundle.js').then(() => {
+        new frappe.ui.ShippingRatesList({
+          wrapper: '#shipping-rates',
+          frm: frm,
+          pricings: available_services
+        })
+      })
     }
   })
 
-  frm.render_available_services(dialog, headers, arranged_services)
+  frm.render_available_services(dialog, headers, available_services)
 
-  dialog.$body.on('click', '.btn', function () {
-    let service_type = $(this).attr('data-type')
-    let service_index = cint($(this).attr('id').split('-')[2])
-    let service_data = arranged_services[service_type][service_index]
-    frm.select_row(service_data)
-  })
-
-  frm.select_row = function (service_data) {
-    // on selecting a row
-
-    dialog.hide()
-  }
   dialog.show()
 }
 
@@ -267,23 +251,3 @@ const validate = function (frm) {
 
   return run()
 }
-
-// Vue
-
-Vue.component('shipping-list', {
-  data: () => ({
-    name: 'Aslam'
-  }),
-  template: '<div>{{ name }}</div>'
-})
-
-const shippingRates = new Vue({
-  el: '#shipping-rates',
-  data() {
-    return {
-      name: 'Aslam'
-    }
-  }
-})
-
-console.log(shippingRates)
