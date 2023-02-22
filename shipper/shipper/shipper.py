@@ -36,3 +36,23 @@ class ShipperUtils():
     def order_by_id(self, orderId):
         url = self.api_base_url + 'v3/order/' + orderId
         return requests.get(url, headers=self.headers)
+
+    def create_order(self, payload):
+        url = self.api_base_url + 'v3/order'
+        return requests.post(url, headers=self.headers, json=payload)
+
+    def convert_phone_number(self, phone_number):
+        converted_number = phone_number.replace("+", "").replace("-", "")
+        if converted_number.startswith("0"):
+            country_code = {
+                "62": "Indonesia",
+                "60": "Malaysia",
+                # Add more country codes here if needed
+            }
+            for code, country in country_code.items():
+                if converted_number.startswith(code):
+                    converted_number = converted_number.replace(code, "")
+                    break
+            else:
+                frappe.throw("Unknown country code.")
+        return converted_number
