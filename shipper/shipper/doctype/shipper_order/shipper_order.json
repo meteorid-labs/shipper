@@ -38,7 +38,10 @@
   "ongkir",
   "status",
   "currency",
-  "amended_from"
+  "amended_from",
+  "cod",
+  "rate_id",
+  "use_insurance"
  ],
  "fields": [
   {
@@ -233,12 +236,30 @@
    "fieldtype": "Currency",
    "label": "Nilai barang",
    "reqd": 1
+  },
+  {
+   "fieldname": "cod",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "cod"
+  },
+  {
+   "fieldname": "rate_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "rate_id"
+  },
+  {
+   "fieldname": "use_insurance",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "use_insurance"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_virtual": 1,
  "links": [],
- "modified": "2023-02-20 15:32:23.507867",
+ "modified": "2023-02-22 14:03:02.726000",
  "modified_by": "Administrator",
  "module": "Shipper",
  "name": "Shipper Order",
