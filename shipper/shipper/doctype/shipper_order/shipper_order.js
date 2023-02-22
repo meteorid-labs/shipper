@@ -13,11 +13,11 @@ frappe.ui.form.on('Shipper Order', {
     // add click event listener to searchLogisticButton
     searchLogisticButton.on('click', function () {
       // searchLogisticButton.prop('disabled', true)
-      // const isValidated = validate(frm)
+      const isValidated = validate(frm)
 
-      // if (isValidated) {
-      return frm.events.fetch_shipping_rates(frm)
-      // }
+      if (isValidated) {
+        return frm.events.fetch_shipping_rates(frm)
+      }
 
       // searchLogisticButton.prop('disabled', false)
     })
