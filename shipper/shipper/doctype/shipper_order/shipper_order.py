@@ -26,9 +26,79 @@ class ShipperAddress(BaseModel):
 	status = CharField()
 
 class ShipperOrder(Document):
-	
-	def db_insert(self, *args, **kwargs):
-		pass
+	def save(self, *args, **kwargs):
+		import json
+
+		d = self.get_valid_dict()
+
+		origin_address = frappe.get_doc('Shipper Address', d.origin_address)
+		destination_address = frappe.get_doc('Shipper Address', d.destination_address)
+
+		origin_meta_address = json.loads(origin_address.meta_address)
+		destination_meta_address = json.loads(destination_address.meta_address)
+
+		package_types = {
+			'document': 1,
+			'small_package': 2,
+			'medium_package': 3,
+		}
+		qty = 1
+		package_price = d.item_value * qty
+		payment_type = 'cash'
+
+		payload = {
+			'consignee': {
+				'name': destination_address.name,
+				'phone_number': ShipperUtils().convert_phone_number(destination_address.phone_number)
+			},
+			'consigner': {
+				'name': origin_address.name,
+				'phone_number': ShipperUtils().convert_phone_number(origin_address.phone_number)
+			},
+			'courier': {
+				'cod': bool(d.cod),
+				'rate_id': d.rate_id,
+				'use_insurance': bool(d.use_insurance)
+			},
+			'coverage': d.coverage,
+			'destination': {
+				'address': destination_address.address,
+				'area_id': destination_meta_address.get('id'),
+				'lat': str(destination_meta_address.get('lat')),
+				'lng': str(destination_meta_address.get('lng'))
+			},
+			'external_id': d.external_id,
+			'origin': {
+				'address': origin_address.address,
+				'area_id': origin_meta_address.get('id'),
+				'lat': str(origin_meta_address.get('lat')),
+				'lng': str(origin_meta_address.get('lng'))
+			},
+			'package': {
+				'height': float(d.height),
+				'items': [
+				{
+					'name': d.item_type,
+					'price': int(d.item_value),
+					'qty': qty,
+				}
+				],
+				'length': float(d.length),
+				'package_type': package_types.get('small_package'),
+				'price': int(package_price),
+				'weight': float(d.weight),
+				'width': float(d.width)
+			},
+			'payment_type': payment_type,
+		}
+		
+		response = ShipperUtils().create_order(payload)
+
+		result = frappe._dict(response.json())
+
+		if result.metadata.get('http_status_code') == 200:
+			# yeah, it's success
+			pass
 
 	def load_from_db(self):
 		order_id = self.name
@@ -43,13 +113,7 @@ class ShipperOrder(Document):
 			super(Document, self).__init__(result.data)
 		else:
 			# other http_status_code is for create
-			super(Document, self).__init__({
-				'coverage': '',
-				'consignee_name': '',
-				'consignee_phone_number': '',
-				# frappe defaults
-				'modified': '',
-			})
+			super(Document, self).__init__({'modified': ''})
 
 	def db_update(self, *args, **kwargs):
 		pass

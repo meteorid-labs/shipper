@@ -99,6 +99,11 @@ function select_from_available_services(frm, available_services) {
     headers,
     available_services
   ) {
+    // add style to modal-body
+    dialog.$wrapper.find('.modal-body').css({
+      'max-height': 'calc(100vh - 210px)',
+      'overflow-y': 'auto'
+    })
     dialog.fields_dict.available_services.$wrapper.html(
       frappe.render_template('shipper_service_selector', {
         header_columns: headers,
@@ -120,6 +125,7 @@ function select_from_available_services(frm, available_services) {
       frappe.require('shipper.bundle.js').then(() => {
         new frappe.ui.ShippingRatesList({
           wrapper: '#shipping-rates',
+          dialog: dialog,
           frm: frm,
           pricings: available_services
         })

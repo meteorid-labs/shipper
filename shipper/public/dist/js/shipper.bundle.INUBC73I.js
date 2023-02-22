@@ -1,14 +1,30 @@
 (() => {
+  var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __propIsEnum = Object.prototype.propertyIsEnumerable;
+  var __objRest = (source, exclude) => {
+    var target = {};
+    for (var prop in source)
+      if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
+        target[prop] = source[prop];
+    if (source != null && __getOwnPropSymbols)
+      for (var prop of __getOwnPropSymbols(source)) {
+        if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
+          target[prop] = source[prop];
+      }
+    return target;
+  };
+
   // ../shipper/shipper/public/js/ShippingRatesList.vue
   var __vue_script__ = {
     name: "ShippingRatesList",
     props: {
       frm: Object,
-      pricings: Array
+      pricings: Array,
+      dialog: Object
     },
     data: function() {
       return {
-        name: "Aslam",
         activeLogisticTab: null,
         logistic: {
           rate: {
@@ -21,6 +37,21 @@
       logisticTabs() {
         let tabs = this.pricings.map((pricing) => pricing.rate.type);
         tabs = [...new Set(tabs)];
+        tabs.sort((a, b) => {
+          if (a === "Regular")
+            return -1;
+          if (b === "Regular")
+            return 1;
+          if (a === "Express")
+            return -1;
+          if (b === "Express")
+            return 1;
+          if (a === "Trucking")
+            return -1;
+          if (b === "Trucking")
+            return 1;
+          return 0;
+        });
         this.activeLogisticTab = tabs[0];
         return tabs;
       },
@@ -35,8 +66,6 @@
       }
     },
     mounted() {
-      console.log(frappe.utils, this.frm, this.rates);
-      this.frm.set_value("kurir", "JNE");
     },
     methods: {
       fmt_currency(v, c, d) {
@@ -50,7 +79,15 @@
         }
       },
       selectLogistic(pricing) {
+        pricing = JSON.parse(JSON.stringify(pricing));
         this.logistic = pricing;
+      },
+      choose() {
+        this.frm.set_value("kurir", `${this.logistic.logistic.name} - ${this.logistic.rate.name}`);
+        this.frm.set_value("cod", false);
+        this.frm.set_value("rate_id", this.logistic.rate.id);
+        this.frm.set_value("use_insurance", this.logistic.insurance_applied);
+        this.dialog.hide();
       }
     }
   };
@@ -187,6 +224,29 @@
             ])
           ]);
         }), 0)
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "modal-footer" }, [
+        _c("div", { staticClass: "modal-footer-action" }, [
+          _c("button", {
+            staticClass: "btn btn-secondary btn-sm btn-modal-secondary",
+            on: {
+              click: function($event) {
+                return _vm.dialog.hide();
+              }
+            }
+          }, [_vm._v("\n        Cancel\n      ")]),
+          _vm._v(" "),
+          _c("button", {
+            staticClass: "btn btn-primary btn-sm btn-modal-primary",
+            attrs: { disabled: !_vm.logistic.rate.id },
+            on: {
+              click: function($event) {
+                return _vm.choose();
+              }
+            }
+          }, [_vm._v("\n        Choose\n      ")])
+        ])
       ])
     ]);
   };
@@ -195,7 +255,7 @@
   var __vue_inject_styles__ = function(inject) {
     if (!inject)
       return;
-    inject("data-v-b703240a_0", { source: '.more-courier_title {\n  font-size: 16px;\n  font-weight: bold;\n  color: rgb(32, 32, 32);\n  cursor: pointer;\n  display: inline-block;\n  margin: 0px;\n}\n.more-courier_title svg {\n  width: 16px;\n  height: 16px;\n  transform: rotate(0deg);\n  transition: transform 0.3s ease 0s;\n}\n\n/* tabs */\nol.tabs_title {\n  list-style: none;\n  display: flex;\n  padding: 0px;\n  justify-content: flex-start;\n}\nli {\n  margin-right: 30px;\n  cursor: pointer;\n  padding-bottom: 10px;\n  font-weight: 600;\n  font-size: 16px;\n  display: flex;\n  gap: 8px;\n}\nli.tab_item {\n  color: rgb(32, 32, 32);\n  position: relative;\n}\nli.tab_item-active {\n  color: rgb(32, 32, 32);\n}\nli.tab_item-active::before {\n  content: "";\n  height: 3px;\n  width: 100%;\n  background: rgb(240, 74, 65);\n  position: absolute;\n  bottom: -5px;\n  left: 0px;\n}\n.tabs_content {\n  padding: 20px 0px;\n}\n.logistic_item-content {\n  display: flex;\n  -webkit-box-align: center;\n  align-items: center;\n  -webkit-box-pack: justify;\n  justify-content: space-between;\n  padding: 0px 25px;\n  text-align: center;\n}\n.logistic_item-content img {\n  max-width: 70px;\n}\n.logistic_detail {\n  color: rgb(96, 96, 96);\n  text-align: center;\n}\n.logistic_detail-duration {\n  color: rgb(32, 32, 32);\n  font-weight: 600;\n  margin-top: 10px;\n  display: inline-block;\n}\n.logistic_price {\n  font-weight: 600;\n  font-size: 1rem;\n  padding: 0px 8px;\n}\n.logistic_price_original {\n  text-decoration: line-through;\n  font-weight: 400;\n  font-size: 15px;\n  color: rgb(157, 157, 157);\n  text-align: center;\n}\n.logistic_item {\n  border: 1px solid rgb(239, 239, 239);\n  border-radius: 8px;\n  padding: 25px 0px;\n  cursor: pointer;\n  margin-bottom: 15px;\n}\n.logistic_item.logistic_item--active {\n  border: 1px solid rgb(0, 162, 216);\n  padding: 25px 0px 0px;\n}\n.logistic_insurance {\n  border-top: 1px solid rgb(239, 239, 239);\n  padding: 1rem;\n}\n.logistic_insurance-action {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.checkbox_container {\n  display: flex;\n  align-items: center;\n  margin: 0;\n  font-weight: 500;\n  font-size: 0.875rem;\n}\n.logistic_insurance-rate {\n  font-size: 0.875rem;\n  font-weight: 500;\n  opacity: 0.4;\n}\n.logistic_insurance-rate.logistic_insurance-rate--checked {\n  opacity: 1;\n}\n\n/*# sourceMappingURL=ShippingRatesList.vue.map */', map: { "version": 3, "sources": ["../shipper/shipper/public/js/ShippingRatesList.vue", "ShippingRatesList.vue"], "names": [], "mappings": "AAuKA;EACA,eAAA;EACA,iBAAA;EACA,sBAAA;EACA,eAAA;EACA,qBAAA;EACA,WAAA;ACtKA;ADwKA;EACA,WAAA;EACA,YAAA;EACA,uBAAA;EACA,kCAAA;ACtKA;;AD0KA,SAAA;AAEA;EACA,gBAAA;EACA,aAAA;EACA,YAAA;EACA,2BAAA;ACxKA;AD4KA;EACA,kBAAA;EACA,eAAA;EACA,oBAAA;EACA,gBAAA;EACA,eAAA;EACA,aAAA;EACA,QAAA;ACzKA;AD4KA;EACA,sBAAA;EACA,kBAAA;ACzKA;AD4KA;EACA,sBAAA;ACzKA;AD2KA;EACA,WAAA;EACA,WAAA;EACA,WAAA;EACA,4BAAA;EACA,kBAAA;EACA,YAAA;EACA,SAAA;ACzKA;AD6KA;EACA,iBAAA;AC1KA;AD6KA;EACA,aAAA;EACA,yBAAA;EACA,mBAAA;EACA,yBAAA;EACA,8BAAA;EACA,iBAAA;EACA,kBAAA;AC1KA;AD6KA;EACA,eAAA;AC1KA;AD6KA;EACA,sBAAA;EACA,kBAAA;AC1KA;AD6KA;EACA,sBAAA;EACA,gBAAA;EACA,gBAAA;EACA,qBAAA;AC1KA;AD6KA;EACA,gBAAA;EACA,eAAA;EACA,gBAAA;AC1KA;AD6KA;EACA,6BAAA;EACA,gBAAA;EACA,eAAA;EACA,yBAAA;EACA,kBAAA;AC1KA;AD6KA;EACA,oCAAA;EACA,kBAAA;EACA,iBAAA;EACA,eAAA;EACA,mBAAA;AC1KA;AD4KA;EACA,kCAAA;EACA,qBAAA;AC1KA;AD8KA;EACA,wCAAA;EACA,aAAA;AC3KA;AD8KA;EACA,aAAA;EACA,mBAAA;EACA,8BAAA;AC3KA;AD8KA;EACA,aAAA;EACA,mBAAA;EACA,SAAA;EACA,gBAAA;EACA,mBAAA;AC3KA;AD8KA;EACA,mBAAA;EACA,gBAAA;EACA,YAAA;AC3KA;AD6KA;EACA,UAAA;AC3KA;;AAEA,gDAAgD", "file": "ShippingRatesList.vue", "sourcesContent": [`<template>
+    inject("data-v-759d4d76_0", { source: '.modal-footer[data-v-759d4d76] {\n  background: white;\n  padding: var(--padding-md) var(--padding-lg);\n  bottom: -1rem;\n  margin: -15px -20px;\n}\n.modal-footer-action[data-v-759d4d76] {\n  margin-left: auto;\n}\n.more-courier_title[data-v-759d4d76] {\n  font-size: 16px;\n  font-weight: bold;\n  color: rgb(32, 32, 32);\n  cursor: pointer;\n  display: inline-block;\n  margin: 0px;\n}\n.more-courier_title svg[data-v-759d4d76] {\n  width: 16px;\n  height: 16px;\n  transform: rotate(0deg);\n  transition: transform 0.3s ease 0s;\n}\n\n/* tabs */\nol.tabs_title[data-v-759d4d76] {\n  list-style: none;\n  display: flex;\n  padding: 0px;\n  justify-content: flex-start;\n  position: sticky;\n  top: -1rem;\n  background: #fff;\n}\nli[data-v-759d4d76] {\n  margin-right: 30px;\n  cursor: pointer;\n  padding-bottom: 10px;\n  font-weight: 600;\n  font-size: 16px;\n  display: flex;\n  gap: 8px;\n}\nli.tab_item[data-v-759d4d76] {\n  color: rgb(32, 32, 32);\n  position: relative;\n}\nli.tab_item-active[data-v-759d4d76] {\n  color: rgb(32, 32, 32);\n}\nli.tab_item-active[data-v-759d4d76]::before {\n  content: "";\n  height: 3px;\n  width: 100%;\n  background: rgb(240, 74, 65);\n  position: absolute;\n  bottom: -5px;\n  left: 0px;\n}\n.tabs_content[data-v-759d4d76] {\n  padding: 20px 0px;\n}\n.logistic_item-content[data-v-759d4d76] {\n  display: flex;\n  -webkit-box-align: center;\n  align-items: center;\n  -webkit-box-pack: justify;\n  justify-content: space-between;\n  padding: 0px 25px;\n  text-align: center;\n}\n.logistic_item-content img[data-v-759d4d76] {\n  max-width: 70px;\n}\n.logistic_detail[data-v-759d4d76] {\n  color: rgb(96, 96, 96);\n  text-align: center;\n}\n.logistic_detail-duration[data-v-759d4d76] {\n  color: rgb(32, 32, 32);\n  font-weight: 600;\n  margin-top: 10px;\n  display: inline-block;\n}\n.logistic_price[data-v-759d4d76] {\n  font-weight: 600;\n  font-size: 1rem;\n  padding: 0px 8px;\n}\n.logistic_price_original[data-v-759d4d76] {\n  text-decoration: line-through;\n  font-weight: 400;\n  font-size: 15px;\n  color: rgb(157, 157, 157);\n  text-align: center;\n}\n.logistic_item[data-v-759d4d76] {\n  border: 1px solid rgb(239, 239, 239);\n  border-radius: 8px;\n  padding: 25px 0px;\n  cursor: pointer;\n  margin-bottom: 15px;\n}\n.logistic_item.logistic_item--active[data-v-759d4d76] {\n  border: 1px solid rgb(0, 162, 216);\n  padding: 25px 0px 0px;\n}\n.logistic_insurance[data-v-759d4d76] {\n  border-top: 1px solid rgb(239, 239, 239);\n  padding: 1rem;\n}\n.logistic_insurance-action[data-v-759d4d76] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.checkbox_container[data-v-759d4d76] {\n  display: flex;\n  align-items: center;\n  margin: 0;\n  font-weight: 500;\n  font-size: 0.875rem;\n}\n.logistic_insurance-rate[data-v-759d4d76] {\n  font-size: 0.875rem;\n  font-weight: 500;\n  opacity: 0.4;\n}\n.logistic_insurance-rate.logistic_insurance-rate--checked[data-v-759d4d76] {\n  opacity: 1;\n}\n\n/*# sourceMappingURL=ShippingRatesList.vue.map */', map: { "version": 3, "sources": ["../shipper/shipper/public/js/ShippingRatesList.vue", "ShippingRatesList.vue"], "names": [], "mappings": "AA8MA;EACA,iBAAA;EACA,4CAAA;EACA,aAAA;EACA,mBAAA;AC7MA;ADgNA;EACA,iBAAA;AC7MA;AD+MA;EACA,eAAA;EACA,iBAAA;EACA,sBAAA;EACA,eAAA;EACA,qBAAA;EACA,WAAA;AC5MA;AD8MA;EACA,WAAA;EACA,YAAA;EACA,uBAAA;EACA,kCAAA;AC5MA;;ADgNA,SAAA;AAEA;EACA,gBAAA;EACA,aAAA;EACA,YAAA;EACA,2BAAA;EAEA,gBAAA;EACA,UAAA;EACA,gBAAA;AC/MA;ADmNA;EACA,kBAAA;EACA,eAAA;EACA,oBAAA;EACA,gBAAA;EACA,eAAA;EACA,aAAA;EACA,QAAA;AChNA;ADmNA;EACA,sBAAA;EACA,kBAAA;AChNA;ADmNA;EACA,sBAAA;AChNA;ADkNA;EACA,WAAA;EACA,WAAA;EACA,WAAA;EACA,4BAAA;EACA,kBAAA;EACA,YAAA;EACA,SAAA;AChNA;ADoNA;EACA,iBAAA;ACjNA;ADoNA;EACA,aAAA;EACA,yBAAA;EACA,mBAAA;EACA,yBAAA;EACA,8BAAA;EACA,iBAAA;EACA,kBAAA;ACjNA;ADoNA;EACA,eAAA;ACjNA;ADoNA;EACA,sBAAA;EACA,kBAAA;ACjNA;ADoNA;EACA,sBAAA;EACA,gBAAA;EACA,gBAAA;EACA,qBAAA;ACjNA;ADoNA;EACA,gBAAA;EACA,eAAA;EACA,gBAAA;ACjNA;ADoNA;EACA,6BAAA;EACA,gBAAA;EACA,eAAA;EACA,yBAAA;EACA,kBAAA;ACjNA;ADoNA;EACA,oCAAA;EACA,kBAAA;EACA,iBAAA;EACA,eAAA;EACA,mBAAA;ACjNA;ADmNA;EACA,kCAAA;EACA,qBAAA;ACjNA;ADqNA;EACA,wCAAA;EACA,aAAA;AClNA;ADqNA;EACA,aAAA;EACA,mBAAA;EACA,8BAAA;AClNA;ADqNA;EACA,aAAA;EACA,mBAAA;EACA,SAAA;EACA,gBAAA;EACA,mBAAA;AClNA;ADqNA;EACA,mBAAA;EACA,gBAAA;EACA,YAAA;AClNA;ADoNA;EACA,UAAA;AClNA;;AAEA,gDAAgD", "file": "ShippingRatesList.vue", "sourcesContent": [`<template>
   <div class="more-courier_container">
     <div class="tabs_container">
       <ol class="tabs_title">
@@ -287,6 +347,24 @@
         </div>
       </div>
     </div>
+
+    <div class="modal-footer">
+      <div class="modal-footer-action">
+        <button
+          class="btn btn-secondary btn-sm btn-modal-secondary"
+          @click="dialog.hide()"
+        >
+          Cancel
+        </button>
+        <button
+          class="btn btn-primary btn-sm btn-modal-primary"
+          @click="choose()"
+          :disabled="!logistic.rate.id"
+        >
+          Choose
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -296,12 +374,12 @@ export default {
 
   props: {
     frm: Object,
-    pricings: Array
+    pricings: Array,
+    dialog: Object
   },
 
   data: function () {
     return {
-      name: 'Aslam',
       activeLogisticTab: null,
       logistic: {
         rate: {
@@ -315,6 +393,17 @@ export default {
     logisticTabs() {
       let tabs = this.pricings.map((pricing) => pricing.rate.type)
       tabs = [...new Set(tabs)]
+
+      // sort tabs Regular, Express, Trucking etc
+      tabs.sort((a, b) => {
+        if (a === 'Regular') return -1
+        if (b === 'Regular') return 1
+        if (a === 'Express') return -1
+        if (b === 'Express') return 1
+        if (a === 'Trucking') return -1
+        if (b === 'Trucking') return 1
+        return 0
+      })
 
       this.activeLogisticTab = tabs[0]
       return tabs
@@ -334,9 +423,6 @@ export default {
   },
 
   mounted() {
-    console.log(frappe.utils, this.frm, this.rates)
-    this.frm.set_value('kurir', 'JNE')
-
     // frappe set value for field "kurir"
     // frappe.model.set_value('Shipping Order', 'Kurir', 'kurir', 'JNE')
   },
@@ -355,13 +441,36 @@ export default {
     },
 
     selectLogistic(pricing) {
+      // copy without reactivity
+      pricing = JSON.parse(JSON.stringify(pricing))
       this.logistic = pricing
+    },
+
+    choose() {
+      this.frm.set_value(
+        'kurir',
+        \`\${this.logistic.logistic.name} - \${this.logistic.rate.name}\`
+      )
+      this.frm.set_value('cod', false)
+      this.frm.set_value('rate_id', this.logistic.rate.id)
+      this.frm.set_value('use_insurance', this.logistic.insurance_applied)
+      this.dialog.hide()
     }
   }
 }
 <\/script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.modal-footer {
+  background: white;
+  padding: var(--padding-md) var(--padding-lg);
+  bottom: -1rem;
+  margin: -15px -20px;
+}
+
+.modal-footer-action {
+  margin-left: auto;
+}
 .more-courier_title {
   font-size: 16px;
   font-weight: bold;
@@ -385,6 +494,10 @@ ol {
     display: flex;
     padding: 0px;
     justify-content: flex-start;
+
+    position: sticky;
+    top: -1rem;
+    background: #fff;
   }
 }
 
@@ -503,9 +616,9 @@ li.tab_item-active {
   }
 }
 </style>
-`, '.more-courier_title {\n  font-size: 16px;\n  font-weight: bold;\n  color: rgb(32, 32, 32);\n  cursor: pointer;\n  display: inline-block;\n  margin: 0px;\n}\n.more-courier_title svg {\n  width: 16px;\n  height: 16px;\n  transform: rotate(0deg);\n  transition: transform 0.3s ease 0s;\n}\n\n/* tabs */\nol.tabs_title {\n  list-style: none;\n  display: flex;\n  padding: 0px;\n  justify-content: flex-start;\n}\n\nli {\n  margin-right: 30px;\n  cursor: pointer;\n  padding-bottom: 10px;\n  font-weight: 600;\n  font-size: 16px;\n  display: flex;\n  gap: 8px;\n}\n\nli.tab_item {\n  color: rgb(32, 32, 32);\n  position: relative;\n}\n\nli.tab_item-active {\n  color: rgb(32, 32, 32);\n}\nli.tab_item-active::before {\n  content: "";\n  height: 3px;\n  width: 100%;\n  background: rgb(240, 74, 65);\n  position: absolute;\n  bottom: -5px;\n  left: 0px;\n}\n\n.tabs_content {\n  padding: 20px 0px;\n}\n\n.logistic_item-content {\n  display: flex;\n  -webkit-box-align: center;\n  align-items: center;\n  -webkit-box-pack: justify;\n  justify-content: space-between;\n  padding: 0px 25px;\n  text-align: center;\n}\n\n.logistic_item-content img {\n  max-width: 70px;\n}\n\n.logistic_detail {\n  color: rgb(96, 96, 96);\n  text-align: center;\n}\n\n.logistic_detail-duration {\n  color: rgb(32, 32, 32);\n  font-weight: 600;\n  margin-top: 10px;\n  display: inline-block;\n}\n\n.logistic_price {\n  font-weight: 600;\n  font-size: 1rem;\n  padding: 0px 8px;\n}\n\n.logistic_price_original {\n  text-decoration: line-through;\n  font-weight: 400;\n  font-size: 15px;\n  color: rgb(157, 157, 157);\n  text-align: center;\n}\n\n.logistic_item {\n  border: 1px solid rgb(239, 239, 239);\n  border-radius: 8px;\n  padding: 25px 0px;\n  cursor: pointer;\n  margin-bottom: 15px;\n}\n.logistic_item.logistic_item--active {\n  border: 1px solid rgb(0, 162, 216);\n  padding: 25px 0px 0px;\n}\n\n.logistic_insurance {\n  border-top: 1px solid rgb(239, 239, 239);\n  padding: 1rem;\n}\n\n.logistic_insurance-action {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n\n.checkbox_container {\n  display: flex;\n  align-items: center;\n  margin: 0;\n  font-weight: 500;\n  font-size: 0.875rem;\n}\n\n.logistic_insurance-rate {\n  font-size: 0.875rem;\n  font-weight: 500;\n  opacity: 0.4;\n}\n.logistic_insurance-rate.logistic_insurance-rate--checked {\n  opacity: 1;\n}\n\n/*# sourceMappingURL=ShippingRatesList.vue.map */'] }, media: void 0 });
+`, '.modal-footer {\n  background: white;\n  padding: var(--padding-md) var(--padding-lg);\n  bottom: -1rem;\n  margin: -15px -20px;\n}\n\n.modal-footer-action {\n  margin-left: auto;\n}\n\n.more-courier_title {\n  font-size: 16px;\n  font-weight: bold;\n  color: rgb(32, 32, 32);\n  cursor: pointer;\n  display: inline-block;\n  margin: 0px;\n}\n.more-courier_title svg {\n  width: 16px;\n  height: 16px;\n  transform: rotate(0deg);\n  transition: transform 0.3s ease 0s;\n}\n\n/* tabs */\nol.tabs_title {\n  list-style: none;\n  display: flex;\n  padding: 0px;\n  justify-content: flex-start;\n  position: sticky;\n  top: -1rem;\n  background: #fff;\n}\n\nli {\n  margin-right: 30px;\n  cursor: pointer;\n  padding-bottom: 10px;\n  font-weight: 600;\n  font-size: 16px;\n  display: flex;\n  gap: 8px;\n}\n\nli.tab_item {\n  color: rgb(32, 32, 32);\n  position: relative;\n}\n\nli.tab_item-active {\n  color: rgb(32, 32, 32);\n}\nli.tab_item-active::before {\n  content: "";\n  height: 3px;\n  width: 100%;\n  background: rgb(240, 74, 65);\n  position: absolute;\n  bottom: -5px;\n  left: 0px;\n}\n\n.tabs_content {\n  padding: 20px 0px;\n}\n\n.logistic_item-content {\n  display: flex;\n  -webkit-box-align: center;\n  align-items: center;\n  -webkit-box-pack: justify;\n  justify-content: space-between;\n  padding: 0px 25px;\n  text-align: center;\n}\n\n.logistic_item-content img {\n  max-width: 70px;\n}\n\n.logistic_detail {\n  color: rgb(96, 96, 96);\n  text-align: center;\n}\n\n.logistic_detail-duration {\n  color: rgb(32, 32, 32);\n  font-weight: 600;\n  margin-top: 10px;\n  display: inline-block;\n}\n\n.logistic_price {\n  font-weight: 600;\n  font-size: 1rem;\n  padding: 0px 8px;\n}\n\n.logistic_price_original {\n  text-decoration: line-through;\n  font-weight: 400;\n  font-size: 15px;\n  color: rgb(157, 157, 157);\n  text-align: center;\n}\n\n.logistic_item {\n  border: 1px solid rgb(239, 239, 239);\n  border-radius: 8px;\n  padding: 25px 0px;\n  cursor: pointer;\n  margin-bottom: 15px;\n}\n.logistic_item.logistic_item--active {\n  border: 1px solid rgb(0, 162, 216);\n  padding: 25px 0px 0px;\n}\n\n.logistic_insurance {\n  border-top: 1px solid rgb(239, 239, 239);\n  padding: 1rem;\n}\n\n.logistic_insurance-action {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n\n.checkbox_container {\n  display: flex;\n  align-items: center;\n  margin: 0;\n  font-weight: 500;\n  font-size: 0.875rem;\n}\n\n.logistic_insurance-rate {\n  font-size: 0.875rem;\n  font-weight: 500;\n  opacity: 0.4;\n}\n.logistic_insurance-rate.logistic_insurance-rate--checked {\n  opacity: 1;\n}\n\n/*# sourceMappingURL=ShippingRatesList.vue.map */'] }, media: void 0 });
   };
-  var __vue_scope_id__ = void 0;
+  var __vue_scope_id__ = "data-v-759d4d76";
   var __vue_module_identifier__ = void 0;
   var __vue_is_functional_template__ = false;
   function __vue_normalize__(template, style, script, scope, functional, moduleIdentifier, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
@@ -613,17 +726,14 @@ li.tab_item-active {
 
   // ../shipper/shipper/public/js/shipper.bundle.js
   var ShippingRatesList = class {
-    constructor({ wrapper, frm, pricings }) {
+    constructor(_a) {
+      var _b = _a, { wrapper } = _b, props = __objRest(_b, ["wrapper"]);
       this.$wrapper = $(wrapper);
-      this.frm = frm;
-      this.pricings = pricings;
+      Object.assign(this, props);
       let $vm = new Vue({
         el: this.$wrapper.get(0),
         render: (h) => h(ShippingRatesList_default, {
-          props: {
-            pricings: this.pricings,
-            frm: this.frm
-          }
+          props
         })
       });
       this.$component = $vm.$children[0];
@@ -633,4 +743,4 @@ li.tab_item-active {
   frappe.ui.ShippingRatesList = ShippingRatesList;
   var shipper_bundle_default = ShippingRatesList;
 })();
-//# sourceMappingURL=shipper.bundle.ITJHZS4J.js.map
+//# sourceMappingURL=shipper.bundle.INUBC73I.js.map

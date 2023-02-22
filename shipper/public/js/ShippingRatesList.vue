@@ -90,6 +90,24 @@
         </div>
       </div>
     </div>
+
+    <div class="modal-footer">
+      <div class="modal-footer-action">
+        <button
+          class="btn btn-secondary btn-sm btn-modal-secondary"
+          @click="dialog.hide()"
+        >
+          Cancel
+        </button>
+        <button
+          class="btn btn-primary btn-sm btn-modal-primary"
+          @click="choose()"
+          :disabled="!logistic.rate.id"
+        >
+          Choose
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -99,12 +117,12 @@ export default {
 
   props: {
     frm: Object,
-    pricings: Array
+    pricings: Array,
+    dialog: Object
   },
 
   data: function () {
     return {
-      name: 'Aslam',
       activeLogisticTab: null,
       logistic: {
         rate: {
@@ -118,6 +136,17 @@ export default {
     logisticTabs() {
       let tabs = this.pricings.map((pricing) => pricing.rate.type)
       tabs = [...new Set(tabs)]
+
+      // sort tabs Regular, Express, Trucking etc
+      tabs.sort((a, b) => {
+        if (a === 'Regular') return -1
+        if (b === 'Regular') return 1
+        if (a === 'Express') return -1
+        if (b === 'Express') return 1
+        if (a === 'Trucking') return -1
+        if (b === 'Trucking') return 1
+        return 0
+      })
 
       this.activeLogisticTab = tabs[0]
       return tabs
@@ -137,9 +166,6 @@ export default {
   },
 
   mounted() {
-    console.log(frappe.utils, this.frm, this.rates)
-    this.frm.set_value('kurir', 'JNE')
-
     // frappe set value for field "kurir"
     // frappe.model.set_value('Shipping Order', 'Kurir', 'kurir', 'JNE')
   },
@@ -158,13 +184,36 @@ export default {
     },
 
     selectLogistic(pricing) {
+      // copy without reactivity
+      pricing = JSON.parse(JSON.stringify(pricing))
       this.logistic = pricing
+    },
+
+    choose() {
+      this.frm.set_value(
+        'kurir',
+        `${this.logistic.logistic.name} - ${this.logistic.rate.name}`
+      )
+      this.frm.set_value('cod', false)
+      this.frm.set_value('rate_id', this.logistic.rate.id)
+      this.frm.set_value('use_insurance', this.logistic.insurance_applied)
+      this.dialog.hide()
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.modal-footer {
+  background: white;
+  padding: var(--padding-md) var(--padding-lg);
+  bottom: -1rem;
+  margin: -15px -20px;
+}
+
+.modal-footer-action {
+  margin-left: auto;
+}
 .more-courier_title {
   font-size: 16px;
   font-weight: bold;
@@ -188,6 +237,10 @@ ol {
     display: flex;
     padding: 0px;
     justify-content: flex-start;
+
+    position: sticky;
+    top: -1rem;
+    background: #fff;
   }
 }
 
