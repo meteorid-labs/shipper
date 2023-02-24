@@ -26,7 +26,7 @@ class ShipperAddress(BaseModel):
 	status = CharField()
 
 class ShipperOrder(Document):
-	def save(self, *args, **kwargs):
+	def db_insert(self, *args, **kwargs):
 		import json
 
 		d = self.get_valid_dict()
