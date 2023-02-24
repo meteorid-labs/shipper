@@ -141,7 +141,7 @@ function select_from_available_services(frm, available_services) {
       frappe.require('shipper.bundle.js').then(() => {
         new frappe.ui.Shipper({
           wrapper: '#shipping-rates',
-          compoent: 'shipping_rates',
+          component: 'shipping_rates',
           dialog: dialog,
           frm: frm,
           pricings: available_services
@@ -150,7 +150,7 @@ function select_from_available_services(frm, available_services) {
     }
   })
 
-  frm.render_available_services(dialog, headers, available_services)
+  frm.render_available_services(dialog, available_services)
 
   dialog.show()
 }
