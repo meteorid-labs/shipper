@@ -9,7 +9,7 @@
               <div class="jsx-373512853 col-shipper">
                 <div>
                   <span class="title">Order ID </span>&nbsp;&nbsp;
-                  <span class="title value"> 22C6JNXMVD334 </span>
+                  <span class="title value">{{ order.order_id }}</span>
                 </div>
               </div>
               <div class="jsx-373512853 col-shipper">
@@ -30,13 +30,17 @@
                       <div class="box-title">Data Pengirim</div>
                     </div>
                     <p class="box-paragraph">
-                      Aslam H / aslam.hafidz@meteor.id / 6281901560689
+                      {{ consigner }}
                     </p>
                     <p class="box-paragraph">
-                      Jl monyet kp rangga rt 11 rw 12 no 55 kode pos 17425 kel.
-                      jatiluhur kec. jatiasih, Jatiluhur, Jatiasih
+                      {{ order.origin.address }}, {{ order.origin.area_name }},
+                      {{ order.origin.suburb_name }}
                     </p>
-                    <p class="box-paragraph">Bekasi, Kota, 17425 - INDONESIA</p>
+                    <p class="box-paragraph">
+                      {{ order.origin.city_name }},
+                      {{ order.origin.postcode }} -
+                      {{ order.origin.country_name }}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -44,14 +48,16 @@
                 <div class="box">
                   <div class="box-content">
                     <div class="box-title">Data Penerima</div>
-                    <p class="box-paragraph">Mr. Jonson H / - / 628811223344</p>
+                    <p class="box-paragraph">{{ consignee }}</p>
                     <p class="box-paragraph">
-                      Jl. Baranang Siang, gg. Parta no 100/34A RT 08 RW 07 Kec.
-                      Sumur Bandung, Kota Bandung, Jawa Barat, 40112, Kebon
-                      Pisang, Sumur Bandung
+                      {{ order.destination.address }},
+                      {{ order.destination.area_name }},
+                      {{ order.destination.suburb_name }}
                     </p>
                     <p class="box-paragraph">
-                      Bandung, Kota, 40112 - INDONESIA
+                      {{ order.destination.city_name }},
+                      {{ order.destination.postcode }} -
+                      {{ order.destination.country_name }}
                     </p>
                   </div>
                 </div>
@@ -60,11 +66,23 @@
                 <div class="box">
                   <div class="box-content">
                     <div class="box-title">Detail Paket dan Logistik</div>
-                    <p class="box-paragraph">
-                      Daging Babi 1kg / 4.1 x 4.1 x 4.1 cm / 0.03 Kg
+                    <p
+                      v-for="item in order.package.items"
+                      :key="item.id"
+                      class="box-paragraph"
+                    >
+                      {{ item.name }} / {{ fmt_currency(item.price, 'IDR') }} /
+                      {{ item.qty }} barang
                     </p>
-                    <p class="box-paragraph">1 barang / Rp 10.000</p>
-                    <p class="box-paragraph">JNE - OKE / Rp. 10.000</p>
+                    <p class="box-paragraph">
+                      {{ order.package.length }} x {{ order.package.width }} x
+                      {{ order.package.height }} cm /
+                      {{ order.package.weight }} Kg
+                    </p>
+                    <p class="box-paragraph">
+                      {{ order.courier.name }} - {{ order.courier.rate_name }} /
+                      {{ fmt_currency(courierAmount, 'IDR') }}
+                    </p>
                   </div>
                   <div class="box-action">
                     <span id="linkToChangeData" aria-hidden="true">Ubah</span>
@@ -197,7 +215,47 @@
 
 <script>
 export default {
-  name: 'OrderDetail'
+  name: 'OrderDetail',
+
+  props: {
+    frm: Object
+  },
+
+  computed: {
+    order() {
+      return this.frm.doc.order
+    },
+
+    consigner() {
+      let consigner = this.order.consigner
+
+      return [consigner.name, consigner.email, consigner.phone_number]
+        .filter(Boolean)
+        .join(' / ')
+    },
+
+    consignee() {
+      let consignee = this.order.consignee
+
+      return [consignee.name, consignee.email, consignee.phone_number]
+        .filter(Boolean)
+        .join(' / ')
+    },
+
+    courierAmount() {
+      if (this.order.courier.use_insurance) {
+        return this.order.courier.amount + this.order.courier.insurance_amount
+      }
+
+      return this.order.courier.amount
+    }
+  },
+
+  methods: {
+    fmt_currency(v, c, d) {
+      return window.format_currency(v, c, d)
+    }
+  }
 }
 </script>
 
