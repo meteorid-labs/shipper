@@ -3,27 +3,8 @@
 
 import frappe
 from frappe.model.document import Document
-from peewee import *
-from playhouse.mysql_ext import MariaDBConnectorDatabase
 import datetime
 from shipper.shipper.shipper import ShipperUtils
-
-db = MariaDBConnectorDatabase('mcp', host='localhost', user='root')
-
-class BaseModel(Model):
-	class Meta:
-		database = db
-
-class ShipperAddress(BaseModel):
-	address1 = CharField()
-	address2 = CharField()
-	contact = CharField()
-	isDefault = BooleanField()
-	lat = FloatField()
-	lng = FloatField()
-	name = CharField()
-	postcode = CharField()
-	status = CharField()
 
 class ShipperOrder(Document):
 	def db_insert(self, *args, **kwargs):
