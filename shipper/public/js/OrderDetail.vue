@@ -118,7 +118,7 @@
             <div class="order_title">
               <div class="jsx-502944319 row-shipper root">
                 <div class="jsx-1280719509 col-shipper">
-                  <div class="city">Bekasi, Kota</div>
+                  <div class="city">{{ order.origin.city_name }}</div>
                 </div>
                 <div class="jsx-1280719509 col-shipper">
                   <img
@@ -127,7 +127,7 @@
                   />
                 </div>
                 <div class="jsx-1280719509 col-shipper">
-                  <div class="city">Bandung, Kota</div>
+                  <div class="city">{{ order.destination.city_name }}</div>
                 </div>
               </div>
             </div>
@@ -140,17 +140,25 @@
             </div>
             <div class="order_detail">
               <div class="order_detail-item">
-                <div>JNE - OKE</div>
-                <div>Rp 10.000</div>
+                <div>
+                  {{ order.courier.name }} - {{ order.courier.rate_name }}
+                </div>
+                <div>{{ fmt_currency(order.courier.amount, 'IDR') }}</div>
               </div>
               <div class="order_detail-item">
                 <div>Pajak</div>
                 <div>Termasuk</div>
               </div>
+              <div class="order_detail-item">
+                <div>Asuransi - {{ order.courier.name }}</div>
+                <div>
+                  {{ fmt_currency(order.courier.insurance_amount, 'IDR') }}
+                </div>
+              </div>
             </div>
             <div class="order_detail-item order_detail-total">
               <div>Total Biaya</div>
-              <div>Rp 10.000</div>
+              <div>{{ fmt_currency(courierAmount, 'IDR') }}</div>
             </div>
           </div>
         </div>
@@ -161,7 +169,7 @@
               <h5>Shipper Status</h5>
               <h5>Logistic Status</h5>
             </div>
-            <div class="status">
+            <div v-for="tracking in order.trackings" class="status">
               <div class="status_item">
                 <div class="status_icon">
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -174,15 +182,33 @@
                 </div>
                 <div class="status_detail">
                   <div>
-                    <div class="status_time">19-12-2022, 13:27</div>
-                    <div class="status_name">Paket sedang dipersiapkan</div>
-                    <div class="status_time">Paket sedang dipersiapkan</div>
+                    <div class="status_time">
+                      {{
+                        moment(tracking.created_date).format(
+                          'DD-MM-YYYY, HH:mm'
+                        )
+                      }}
+                    </div>
+                    <div class="status_name">
+                      {{ tracking.shipper_status.name }}
+                    </div>
+                    <div class="status_time">
+                      {{ tracking.shipper_status.description }}
+                    </div>
                   </div>
                   <div>
-                    <div class="status_time">19-12-2022, 13:27</div>
-                    <div class="status_name">Order Masuk ke sistem</div>
                     <div class="status_time">
-                      Data order sudah masuk ke sistem
+                      {{
+                        moment(tracking.created_date).format(
+                          'DD-MM-YYYY, HH:mm'
+                        )
+                      }}
+                    </div>
+                    <div class="status_name">
+                      {{ tracking.logistic_status.name }}
+                    </div>
+                    <div class="status_time">
+                      {{ tracking.logistic_status.description }}
                     </div>
                   </div>
                 </div>
@@ -254,6 +280,10 @@ export default {
   methods: {
     fmt_currency(v, c, d) {
       return window.format_currency(v, c, d)
+    },
+
+    moment(...args) {
+      return window.moment(...args)
     }
   }
 }
@@ -508,6 +538,11 @@ section {
   margin-bottom: 25px;
 }
 
+.card h4 {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
 .notification_wrapper {
   width: 100%;
   display: inline-block;
@@ -530,7 +565,7 @@ section {
 }
 
 .order_title {
-  font-size: 20px;
+  font-size: 1.125rem;
   font-weight: 600;
 }
 
@@ -626,8 +661,9 @@ img {
 }
 
 .status_title h5 {
-  margin-top: 0px;
-  font-size: 16px;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
   color: rgb(112, 112, 112);
 }
 
@@ -693,6 +729,7 @@ img {
 .status_name {
   color: rgb(32, 32, 32);
   margin: 5px 0px;
+  font-weight: 600;
 }
 
 .pickup-action {
