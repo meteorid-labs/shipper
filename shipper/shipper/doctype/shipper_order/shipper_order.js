@@ -5,7 +5,7 @@ let searchLogisticButton = null
 
 frappe.ui.form.on('Shipper Order', {
   refresh: function (frm) {
-    if (typeof frm.is_new() === 'undefined') {
+    if (typeof frm.doc.order !== 'undefined') {
       console.log('frm.is_new() is undefined')
 
       // remove all tag that has visible-section class under form-page div except the first one
