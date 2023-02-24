@@ -5,15 +5,16 @@ let searchLogisticButton = null
 
 frappe.ui.form.on('Shipper Order', {
   refresh: function (frm) {
-    if (typeof frm.doc.order !== 'undefined') {
+    if (typeof frm.doc.order !== 'undefined' && frm.doc.order) {
       console.log('frm.is_new() is undefined')
 
+      frm.$wrapper.find('.form-page').find('.visible-section').first().show()
       // remove all tag that has visible-section class under form-page div except the first one
       frm.$wrapper
         .find('.form-page')
         .find('.visible-section')
         .not(':first')
-        .remove()
+        .hide()
 
       frappe.require('shipper.bundle.js').then(() => {
         frm.fields_dict.order_detail.$wrapper.html(
@@ -26,6 +27,17 @@ frappe.ui.form.on('Shipper Order', {
           frm: frm
         })
       })
+    } else {
+      frm.$wrapper.find('.form-page').find('.visible-section').first().hide()
+
+      frm.$wrapper
+        .find('.form-page')
+        .find('.visible-section')
+        .not(':first')
+        .show()
+
+      // console.log(frm.get_field('order_detail'))
+      frm.get_field('order').$wrapper.html('')
     }
 
     searchLogisticButton = frm
