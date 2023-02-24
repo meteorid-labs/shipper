@@ -41,7 +41,8 @@
   "currency",
   "cod",
   "rate_id",
-  "use_insurance"
+  "use_insurance",
+  "order"
  ],
  "fields": [
   {
@@ -250,12 +251,18 @@
    "fieldname": "order_detail",
    "fieldtype": "HTML",
    "label": "Order Detail"
+  },
+  {
+   "fieldname": "order",
+   "fieldtype": "Data",
+   "is_virtual": 1,
+   "label": "Order"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_virtual": 1,
  "links": [],
- "modified": "2023-02-24 11:09:23.387051",
+ "modified": "2023-02-24 13:39:18.674557",
  "modified_by": "Administrator",
  "module": "Shipper",
  "name": "Shipper Order",
