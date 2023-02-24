@@ -7,6 +7,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "order_detail",
   "data_shipment_section",
   "coverage",
   "section_break_xhbuu",
@@ -40,7 +41,8 @@
   "currency",
   "cod",
   "rate_id",
-  "use_insurance"
+  "use_insurance",
+  "order"
  ],
  "fields": [
   {
@@ -244,12 +246,23 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "use_insurance"
+  },
+  {
+   "fieldname": "order_detail",
+   "fieldtype": "HTML",
+   "label": "Order Detail"
+  },
+  {
+   "fieldname": "order",
+   "fieldtype": "Data",
+   "is_virtual": 1,
+   "label": "Order"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_virtual": 1,
  "links": [],
- "modified": "2023-02-24 10:25:44.095085",
+ "modified": "2023-02-24 13:39:18.674557",
  "modified_by": "Administrator",
  "module": "Shipper",
  "name": "Shipper Order",

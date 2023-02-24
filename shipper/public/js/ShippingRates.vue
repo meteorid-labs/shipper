@@ -113,7 +113,7 @@
 
 <script>
 export default {
-  name: 'ShippingRatesList',
+  name: 'ShippingRates',
 
   props: {
     frm: Object,

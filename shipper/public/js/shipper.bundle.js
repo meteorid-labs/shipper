@@ -1,15 +1,21 @@
-import ShippingRatesListComponent from './ShippingRatesList.vue'
+import ShippingRatesComponent from './ShippingRates.vue'
+import OrderDetailComponent from './OrderDetail.vue'
 
-class ShippingRatesList {
-  constructor({ wrapper, ...props }) {
+class Shipper {
+  constructor({ wrapper, component, ...props }) {
     this.$wrapper = $(wrapper)
+
+    const components = {
+      order_detail: OrderDetailComponent,
+      shipping_rates: ShippingRatesComponent
+    }
 
     Object.assign(this, props)
 
     let $vm = new Vue({
       el: this.$wrapper.get(0),
       render: (h) =>
-        h(ShippingRatesListComponent, {
+        h(components[component], {
           props: props
         })
     })
@@ -19,5 +25,5 @@ class ShippingRatesList {
 }
 
 frappe.provide('frappe.ui')
-frappe.ui.ShippingRatesList = ShippingRatesList
-export default ShippingRatesList
+frappe.ui.Shipper = Shipper
+export default Shipper

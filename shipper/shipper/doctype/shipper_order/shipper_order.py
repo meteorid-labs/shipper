@@ -110,7 +110,7 @@ class ShipperOrder(Document):
 		
 		# if http_status_code == 200 then it's for view
 		if result.metadata.get('http_status_code') == 200:
-			super(Document, self).__init__(result.data)
+			super(Document, self).__init__({'order':result.data})
 		else:
 			# other http_status_code is for create
 			super(Document, self).__init__({'modified': ''})
