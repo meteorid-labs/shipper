@@ -149,7 +149,10 @@
                 <div>Pajak</div>
                 <div>Termasuk</div>
               </div>
-              <div class="order_detail-item">
+              <div
+                v-if="order.courier.insurance_amount"
+                class="order_detail-item"
+              >
                 <div>Asuransi - {{ order.courier.name }}</div>
                 <div>
                   {{ fmt_currency(order.courier.insurance_amount, 'IDR') }}
