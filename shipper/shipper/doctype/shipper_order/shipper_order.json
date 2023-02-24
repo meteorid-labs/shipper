@@ -7,6 +7,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "order_detail",
   "data_shipment_section",
   "coverage",
   "section_break_xhbuu",
@@ -244,12 +245,17 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "use_insurance"
+  },
+  {
+   "fieldname": "order_detail",
+   "fieldtype": "HTML",
+   "label": "Order Detail"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_virtual": 1,
  "links": [],
- "modified": "2023-02-24 10:25:44.095085",
+ "modified": "2023-02-24 11:09:23.387051",
  "modified_by": "Administrator",
  "module": "Shipper",
  "name": "Shipper Order",

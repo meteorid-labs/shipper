@@ -5,21 +5,39 @@ let searchLogisticButton = null
 
 frappe.ui.form.on('Shipper Order', {
   refresh: function (frm) {
-    // get searchLogistic button by data-fieldname="cari_kurir_logistik"
+    if (typeof frm.is_new() === 'undefined') {
+      console.log('frm.is_new() is undefined')
+
+      // remove all tag that has visible-section class under form-page div except the first one
+      frm.$wrapper
+        .find('.form-page')
+        .find('.visible-section')
+        .not(':first')
+        .remove()
+
+      frappe.require('shipper.bundle.js').then(() => {
+        frm.fields_dict.order_detail.$wrapper.html(
+          frappe.render_template('order_detail')
+        )
+
+        new frappe.ui.Shipper({
+          wrapper: '#order-detail',
+          component: 'order_detail',
+          frm: frm
+        })
+      })
+    }
+
     searchLogisticButton = frm
       .get_field('cari_kurir_logistik')
       .$wrapper.find('.btn')
 
-    // add click event listener to searchLogisticButton
     searchLogisticButton.on('click', function () {
-      // searchLogisticButton.prop('disabled', true)
       const isValidated = validate(frm)
 
       if (isValidated) {
         return frm.events.fetch_shipping_rates(frm)
       }
-
-      // searchLogisticButton.prop('disabled', false)
     })
   },
 
@@ -86,27 +104,13 @@ frappe.ui.form.on('Shipper Order', {
 })
 
 function select_from_available_services(frm, available_services) {
-  var headers = [
-    __('Service Provider'),
-    __('Parcel Service'),
-    __('Parcel Service Type'),
-    __('Price'),
-    ''
-  ]
-
-  frm.render_available_services = function (
-    dialog,
-    headers,
-    available_services
-  ) {
-    // add style to modal-body
+  frm.render_available_services = function (dialog, available_services) {
     dialog.$wrapper.find('.modal-body').css({
       'max-height': 'calc(100vh - 210px)',
       'overflow-y': 'auto'
     })
     dialog.fields_dict.available_services.$wrapper.html(
       frappe.render_template('shipper_service_selector', {
-        header_columns: headers,
         data: available_services
       })
     )
@@ -123,8 +127,9 @@ function select_from_available_services(frm, available_services) {
     ],
     on_page_show: () => {
       frappe.require('shipper.bundle.js').then(() => {
-        new frappe.ui.ShippingRatesList({
+        new frappe.ui.Shipper({
           wrapper: '#shipping-rates',
+          compoent: 'shipping_rates',
           dialog: dialog,
           frm: frm,
           pricings: available_services
