@@ -38,7 +38,6 @@
   "ongkir",
   "status",
   "currency",
-  "amended_from",
   "cod",
   "rate_id",
   "use_insurance"
@@ -167,15 +166,6 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Shipper Order",
-   "print_hide": 1,
-   "read_only": 1
-  },
-  {
    "fieldname": "column_break_gfnmo",
    "fieldtype": "Column Break"
   },
@@ -259,7 +249,7 @@
  "index_web_pages_for_search": 1,
  "is_virtual": 1,
  "links": [],
- "modified": "2023-02-22 14:03:02.726000",
+ "modified": "2023-02-24 10:25:44.095085",
  "modified_by": "Administrator",
  "module": "Shipper",
  "name": "Shipper Order",
