@@ -8,8 +8,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "item_name",
-  "published"
+  "item_name"
  ],
  "fields": [
   {
@@ -19,17 +18,11 @@
    "label": "Item name",
    "reqd": 1,
    "unique": 1
-  },
-  {
-   "default": "1",
-   "fieldname": "published",
-   "fieldtype": "Check",
-   "label": "Published"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-02-28 09:55:03.952026",
+ "modified": "2023-02-28 15:41:59.781046",
  "modified_by": "Administrator",
  "module": "Shipper",
  "name": "Shipper Item Types",
