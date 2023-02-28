@@ -8,7 +8,7 @@ Shipper API for Frappe
 
 2. Once setup is complete, add the shipper app to your bench by running
    ```
-   $ bench get-app shipper https://github.com/meteorid-labs/shipper-for-frappe
+   $ bench get-app shipper https://github.com/meteorid-labs/shipper
    ```
 3. Install the shipper app on the required site by running
    ```
