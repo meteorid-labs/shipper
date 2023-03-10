@@ -3,7 +3,7 @@ import OrderDetailComponent from './OrderDetail.vue'
 
 class Shipper {
   constructor({ wrapper, component, ...props }) {
-    this.$wrapper = $(wrapper)
+    this.$wrapper = wrapper.get ? wrapper.get(0) : wrapper
 
     const components = {
       order_detail: OrderDetailComponent,

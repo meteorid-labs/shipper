@@ -132,14 +132,12 @@ function select_from_available_services(frm, available_services) {
       }
     ],
     on_page_show: () => {
-      frappe.require('shipper.bundle.js').then(() => {
-        new frappe.ui.Shipper({
-          wrapper: '#shipping-rates',
-          component: 'shipping_rates',
-          dialog: dialog,
-          frm: frm,
-          pricings: available_services
-        })
+      new frappe.ui.Shipper({
+        wrapper: '#shipping-rates',
+        component: 'shipping_rates',
+        dialog: dialog,
+        frm: frm,
+        pricings: available_services
       })
     }
   })
