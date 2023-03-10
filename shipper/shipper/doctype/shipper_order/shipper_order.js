@@ -16,16 +16,10 @@ frappe.ui.form.on('Shipper Order', {
         .not(':first')
         .hide()
 
-      frappe.require('shipper.bundle.js').then(() => {
-        frm.fields_dict.order_detail.$wrapper.html(
-          frappe.render_template('order_detail')
-        )
-
-        new frappe.ui.Shipper({
-          wrapper: '#order-detail',
-          component: 'order_detail',
-          frm: frm
-        })
+      new frappe.ui.Shipper({
+        wrapper: frm.fields_dict.order_detail.$wrapper.get(0),
+        component: 'order_detail',
+        frm: frm
       })
     } else {
       frm.$wrapper.find('.form-page').find('.visible-section').first().hide()
