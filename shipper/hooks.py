@@ -1,4 +1,5 @@
 from . import __version__ as app_version
+from frappe import __version__ as frappe_version
 
 app_name = "shipper"
 app_title = "Shipper"
@@ -7,12 +8,15 @@ app_description = "Shipper API for Frappe"
 app_email = "iupin5212@gmail.com"
 app_license = "MIT"
 
+frappe_v = int(frappe_version.split('.')[0])
+
 # Includes in <head>
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/shipper/css/shipper.css"
-# app_include_js = ["shipper.bundle.js"]
+# app_include_css = "file-preview.bundle.css"
+app_include_js = ["shipper.bundle.js"] if frappe_v == 14 else [
+    "shipper_v2.bundle.js"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/shipper/css/shipper.css"
