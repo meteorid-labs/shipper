@@ -13,7 +13,7 @@ class Shipper {
     Object.assign(this, props)
 
     let $vm = new Vue({
-      el: this.$wrapper.get(0),
+      el: this.$wrapper,
       render: (h) =>
         h(components[component], {
           props: props

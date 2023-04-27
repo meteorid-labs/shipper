@@ -191,12 +191,13 @@ export default {
 
     choose() {
       this.frm.set_value(
-        'kurir',
+        'shipping',
         `${this.logistic.logistic.name} - ${this.logistic.rate.name}`
       )
       this.frm.set_value('cod', false)
       this.frm.set_value('rate_id', this.logistic.rate.id)
       this.frm.set_value('use_insurance', this.logistic.insurance_applied)
+      this.frm.set_value('delivery_fee', this.logistic.final_price)
       this.dialog.hide()
     }
   }
