@@ -26,14 +26,11 @@
               <div class="jsx-2949780125 col-shipper">
                 <div class="box">
                   <div class="box-content">
-                    <div class="consigner-header">
-                      <div class="box-title">Data Pengirim</div>
-                    </div>
+                    <div class="box-title">Data Pengirim</div>
+                    <p class="box-paragraph">{{ consigner }}</p>
                     <p class="box-paragraph">
-                      {{ consigner }}
-                    </p>
-                    <p class="box-paragraph">
-                      {{ order.origin.address }}, {{ order.origin.area_name }},
+                      {{ order.origin.address }}, 
+                      {{ order.origin.area_name }},
                       {{ order.origin.suburb_name }}
                     </p>
                     <p class="box-paragraph">
@@ -84,9 +81,9 @@
                       {{ fmt_currency(courierAmount, 'IDR') }}
                     </p>
                   </div>
-                  <div class="box-action">
+                  <!-- <div class="box-action">
                     <span id="linkToChangeData" aria-hidden="true">Ubah</span>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -159,9 +156,9 @@
                 </div>
               </div>
             </div>
-            <div class="order_detail-item order_detail-total">
-              <div>Total Biaya</div>
-              <div>{{ fmt_currency(courierAmount, 'IDR') }}</div>
+            <div class="order_detail-total">
+              <p>Total Biaya</p>
+              <p>{{ fmt_currency(courierAmount, 'IDR') }}</p>
             </div>
           </div>
         </div>
@@ -169,12 +166,14 @@
           <div class="card">
             <h4>Status Pengiriman</h4>
             <div class="status_title">
+            <!-- <div class="status_detail"> -->
               <h5>Shipper Status</h5>
               <h5>Logistic Status</h5>
             </div>
             <div v-for="tracking in order.trackings" class="status">
-              <div class="status_item">
-                <div class="status_icon">
+              <!-- <div class="status_item"> -->
+              <div>
+                <!-- <div class="status_icon">
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <path
                       fill-rule="evenodd"
@@ -182,7 +181,7 @@
                       d="M19.5035 0.496651C19.0469 0.0399837 18.3846 -0.115572 17.7713 0.0877616L1.15668 5.62666C0.464449 5.85666 0 6.50221 0 7.23221C0 7.9611 0.465561 8.60666 1.15668 8.83666L7.56453 10.9733L12.3435 6.19443C12.7468 5.78999 13.4013 5.78999 13.8057 6.19443C14.2102 6.59888 14.2102 7.25332 13.8057 7.65666L9.02676 12.4356L11.1635 18.8433C11.3935 19.5356 12.039 20 12.769 20C13.4979 20 14.1435 19.5356 14.3735 18.8433L19.9124 2.22887C20.1158 1.61665 19.9591 0.953318 19.5035 0.496651Z"
                     ></path>
                   </svg>
-                </div>
+                </div> -->
                 <div class="status_detail">
                   <div>
                     <div class="status_time">
@@ -218,7 +217,7 @@
               </div>
             </div>
           </div>
-          <div>
+          <!-- <div>
             <button
               id="selectPickupTimeSlotButton"
               class="pickup-action"
@@ -234,7 +233,7 @@
                 <span>Batalkan Order</span>
               </div>
             </button>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -247,18 +246,24 @@ export default {
   name: 'OrderDetail',
 
   props: {
-    frm: Object
+    // frm: Object
+    dialog: Object,
+    order_detail: Object,
   },
 
   computed: {
     order() {
-      return this.frm.doc.order
+      return this.order_detail
     },
 
     consigner() {
       let consigner = this.order.consigner
 
-      return [consigner.name, consigner.email, consigner.phone_number]
+      return [
+        consigner.name, 
+        // consigner.email, 
+        consigner.phone_number
+      ]
         .filter(Boolean)
         .join(' / ')
     },
@@ -266,7 +271,11 @@ export default {
     consignee() {
       let consignee = this.order.consignee
 
-      return [consignee.name, consignee.email, consignee.phone_number]
+      return [
+        consignee.name, 
+        // consignee.email, 
+        consignee.phone_number
+      ]
         .filter(Boolean)
         .join(' / ')
     },
@@ -377,7 +386,7 @@ section {
 .row-shipper.jsx-2813964643 {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  /* align-items: center; */
   flex-flow: row wrap;
 }
 
@@ -538,7 +547,7 @@ section {
   border: 1px solid #efefef;
   border-radius: 8px;
   padding: 25px;
-  margin-bottom: 25px;
+  /* margin-bottom: 25px; */
 }
 
 .card h4 {
@@ -657,6 +666,17 @@ img {
   font-weight: 600;
 }
 
+@media only screen and (min-width: 768px) {
+  .order_detail-total {
+    /* margin: 25px 0px 0px; */
+    color: rgb(32, 32, 32);
+    font-size: 22px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
 .status_title {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -712,18 +732,18 @@ img {
   fill: rgb(0, 162, 216);
 }
 
-.status_detail {
+.status_title, .status_detail {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
-@media only screen and (max-width: 425px) {
+/* @media only screen and (max-width: 425px) {
   .status_detail {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-}
+} */
 .status_time {
   color: rgb(173, 173, 173);
   font-size: 14px;
