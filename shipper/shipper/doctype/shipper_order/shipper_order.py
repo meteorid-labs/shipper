@@ -138,9 +138,13 @@ class ShipperOrder(Document):
 
 
 @frappe.whitelist()
-def fetch_shipping_rates(destinationAreaId, destinationLat, destinationLng, height, itemValue, length,
-                         originAreaId, originLat, originLng, validToOrder,
-                         weight, width):
+def fetch_shipping_rates(
+    destinationAreaId,
+    originAreaId,
+    height, length, weight, width, itemValue,
+    validToOrder, 
+    destinationLat = None, destinationLng = None, destinationSuburbId = None, 
+    originLat = None, originLng = None, originSuburbId = None):
 
     pricings = []
 
@@ -148,13 +152,15 @@ def fetch_shipping_rates(destinationAreaId, destinationLat, destinationLng, heig
         'cod': False,
         'destination': {
             'area_id': int(destinationAreaId),
-            'lat': str(destinationLat),
-            'lng': str(destinationLng)
+            'lat': str(destinationLat) if destinationLat is not None else destinationLat,
+            'lng': str(destinationLng) if destinationLng is not None else destinationLng,
+            'suburb_id': int(destinationSuburbId) if destinationSuburbId is not None else destinationSuburbId
         },
         'origin': {
             'area_id': int(originAreaId),
-            'lat': str(originLat),
-            'lng': str(originLng)
+            'lat': str(originLat) if originLat is not None else originLat,
+            'lng': str(originLng) if originLng is not None else originLng,
+            'suburb_id': int(originSuburbId) if originSuburbId is not None else originSuburbId
         },
         'for_order': bool(validToOrder),
         'height': float(height),
