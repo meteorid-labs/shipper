@@ -16,23 +16,12 @@
                 <span class="subtitle">AWB Number </span>&nbsp;&nbsp;
                 <span class="subtitle value">{{ order.awb_number }}</span>
               </div>
-              <!-- Shipment Status -->
-              <div v-if="order.shipment_status === 9" class="jsx-373512853 col-shipper">
-                  <div class="tag_wrapper tag_green_light tag-medium">
-                    <div id="orderStatus" class="tag_text">
-                      {{order.shipment_status.name}}
-                    </div>
-                  </div>
-              </div>
-              <div v-else-if="order.shipment_status in [13, 99]" class="jsx-373512853 col-shipper">
-                  <div class="tag_wrapper tag_red_light tag-medium">
-                    <div id="orderStatus" class="tag_text">
-                      {{order.shipment_status.name}}
-                    </div>
-                  </div>
-              </div>
-              <div v-else class="jsx-373512853 col-shipper">
-                  <div class="tag_wrapper tag_yellow_light tag-medium">
+              <div class="jsx-373512853 col-shipper">
+                  <div class="tag_wrapper tag-medium" :class="{
+                    tag_green_light: order.shipment_status.code === 9,
+                    tag_red_light: [13, 99].includes(order.shipment_status.code),
+                    tag_yellow_light: ![9, 13, 99].includes(order.shipment_status.code)
+                  }">
                     <div id="orderStatus" class="tag_text">
                       {{order.shipment_status.name}}
                     </div>
