@@ -12,12 +12,20 @@
                   <span class="title value">{{ order.order_id }}</span>
                 </div>
               </div>
+              <div v-if="order.awb_number" class="jsx-373512853 col-shipper">
+                <span class="subtitle">AWB Number </span>&nbsp;&nbsp;
+                <span class="subtitle value">{{ order.awb_number }}</span>
+              </div>
               <div class="jsx-373512853 col-shipper">
-                <div class="tag_wrapper tag_yellow_light tag-medium">
-                  <div id="orderStatus" class="tag_text">
-                    Paket sedang dipersiapkan
+                  <div class="tag_wrapper tag-medium" :class="{
+                    tag_green_light: order.shipment_status.code === 9,
+                    tag_red_light: [13, 99].includes(order.shipment_status.code),
+                    tag_yellow_light: ![9, 13, 99].includes(order.shipment_status.code)
+                  }">
+                    <div id="orderStatus" class="tag_text">
+                      {{order.shipment_status.name}}
+                    </div>
                   </div>
-                </div>
               </div>
             </div>
           </div>
@@ -408,8 +416,9 @@ section {
 
 @media only screen and (min-width: 0px) {
   .col-shipper.jsx-373512853 {
-    padding-left: 7px;
-    padding-right: 7px;
+    /* padding-left: 7px; */
+    /* padding-right: 7px; */
+    margin: 7px 0px;
     order: 0;
     display: block;
   }
@@ -435,6 +444,18 @@ section {
   font-weight: bold;
 }
 
+.subtitle {
+  font-size: 20px;
+  line-height: 35px;
+  text-transform: capitalize;
+  color: rgb(32, 32, 32);
+}
+
+.subtitle.value {
+  font-size: 20px;
+  font-weight: bold;
+}
+
 .tag_wrapper {
   display: inline-block;
   overflow: hidden;
@@ -444,6 +465,16 @@ section {
 .tag_yellow_light {
   background-color: rgb(255, 244, 192);
   color: rgb(166, 142, 29);
+}
+
+.tag_green_light {
+  background-color: rgb(204, 255, 192);
+  color: rgb(29, 166, 40);
+}
+
+.tag_red_light {
+  background-color: rgb(255, 192, 192);
+  color: rgb(166, 29, 29);
 }
 
 .tag-medium {
