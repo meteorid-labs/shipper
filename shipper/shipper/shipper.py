@@ -42,6 +42,14 @@ class ShipperUtils():
         url = self.api_base_url + 'v3/order'
         return requests.post(url, headers=self.headers, json=payload)
 
+    def timeslots(self, params={}):
+        url = self.api_base_url + 'v3/pickup/timeslot'
+        return requests.get(url, headers=self.headers, params=params)
+    
+    def create_pickup_order(self, data):
+        url = self.api_base_url + 'v3/pickup/timeslot'
+        return requests.post(url, headers=self.headers, json=data)
+
     def convert_phone_number(self, phone_number):
         converted_number = phone_number.replace("+", "").replace("-", "")
         if converted_number.startswith("0"):
@@ -57,3 +65,11 @@ class ShipperUtils():
             else:
                 frappe.throw("Unknown country code.")
         return converted_number
+
+@frappe.whitelist(allow_guest=True, methods=['POST'])
+def shipper_webhook(**kwargs):
+    print('shipper_webhook')
+    print(f'kwargs: {kwargs}')
+    return {
+        'kwargs': kwargs
+    }
