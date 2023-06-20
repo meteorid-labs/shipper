@@ -174,14 +174,12 @@
           <div class="card">
             <h4>Status Pengiriman</h4>
             <div class="status_title">
-            <!-- <div class="status_detail"> -->
               <h5>Shipper Status</h5>
               <h5>Logistic Status</h5>
             </div>
             <div v-for="tracking in order.trackings" class="status">
-              <!-- <div class="status_item"> -->
-              <div>
-                <!-- <div class="status_icon">
+              <div class="status_item">
+                <div class="status_icon">
                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <path
                       fill-rule="evenodd"
@@ -189,7 +187,7 @@
                       d="M19.5035 0.496651C19.0469 0.0399837 18.3846 -0.115572 17.7713 0.0877616L1.15668 5.62666C0.464449 5.85666 0 6.50221 0 7.23221C0 7.9611 0.465561 8.60666 1.15668 8.83666L7.56453 10.9733L12.3435 6.19443C12.7468 5.78999 13.4013 5.78999 13.8057 6.19443C14.2102 6.59888 14.2102 7.25332 13.8057 7.65666L9.02676 12.4356L11.1635 18.8433C11.3935 19.5356 12.039 20 12.769 20C13.4979 20 14.1435 19.5356 14.3735 18.8433L19.9124 2.22887C20.1158 1.61665 19.9591 0.953318 19.5035 0.496651Z"
                     ></path>
                   </svg>
-                </div> -->
+                </div>
                 <div class="status_detail">
                   <div>
                     <div class="status_time">
@@ -741,7 +739,7 @@ img {
 }
 
 .status_item:last-child {
-  margin-bottom: 0px;
+  /* margin-bottom: 0px; */
 }
 
 .status_icon {
