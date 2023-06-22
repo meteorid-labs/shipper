@@ -2,7 +2,7 @@ import frappe
 import requests
 
 
-class ShipperUtils:
+class ShipperUtils():
     def __init__(self):
         self.api_base_url, self.api_key = frappe.db.get_value(
             "Shipper Settings", "Shipper Settings", ["api_key", "api_base_url"]
