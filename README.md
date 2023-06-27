@@ -10,7 +10,7 @@ Shipper API for Frappe
    ```
    $ bench get-app shipper https://github.com/meteorid-labs/shipper
    ```
-3. Install the shipper app on the required site by running
+3. Install the shipper app on the required site by running.
    ```
    $ bench --site <sitename> install-app shipper
    ```
