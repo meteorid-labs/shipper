@@ -89,6 +89,17 @@ def shipper_webhook(**kwargs):
         and not isinstance(order_awb, str)
     ):
         print("update awb into order")
+        order.awb = webhook_shipper_awb
         notify_order_status(
             order_name, order_customer, order_status, None, webhook_shipper_awb
         )
+
+    if(kwargs['external_status']['name'] == "Paket Terkirim"):
+        frappe.enqueue(order_update,now=False,order_name=order.name)
+
+def order_update(order_name):
+    from ecommerce.oms.doctype.order.order import notify_order_status
+    order = frappe.get_doc("Order",order_name)
+    order.status = "Order Completed"
+    notify_order_status(name=order_name,customer=order.customer,status="Order Completed")
+    order.save(ignore_permissions=True)
