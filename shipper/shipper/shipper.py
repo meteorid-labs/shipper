@@ -67,8 +67,6 @@ class ShipperUtils:
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 def shipper_webhook(**kwargs):
-    from ecommerce.oms.doctype.order.order import notify_order_status
-
     # Callback shipper
     webhook_shipper_order_id = kwargs.get("tracking_id")
     webhook_shipper_awb = kwargs.get("awb")
@@ -77,8 +75,6 @@ def shipper_webhook(**kwargs):
     order = frappe.get_doc(
         "Order", {"shipper_order_id": webhook_shipper_order_id}
     ).as_dict()
-    order_name = order.name
-    order_customer = order.customer
     order_status = order.status
     order_awb = order.awb
 
@@ -89,17 +85,37 @@ def shipper_webhook(**kwargs):
         and not isinstance(order_awb, str)
     ):
         print("update awb into order")
-        order.awb = webhook_shipper_awb
-        notify_order_status(
-            order_name, order_customer, order_status, None, webhook_shipper_awb
+        frappe.enqueue(
+            order_update,
+            now=False,
+            order_name=order.name,
+            order_status=order_status,
+            webhook_shipper_awb=webhook_shipper_awb,
         )
 
-    if(kwargs['external_status']['name'] == "Paket Terkirim"):
-        frappe.enqueue(order_update,now=False,order_name=order.name)
+    if kwargs["external_status"]["name"] == "Paket Terkirim":
+        frappe.enqueue(
+            order_update,
+            now=False,
+            order_name=order.name,
+            order_status="Order Completed",
+        )
 
-def order_update(order_name):
+
+def order_update(order_name, order_status, webhook_shipper_awb=None):
     from ecommerce.oms.doctype.order.order import notify_order_status
-    order = frappe.get_doc("Order",order_name)
-    order.status = "Order Completed"
-    notify_order_status(name=order_name,customer=order.customer,status="Order Completed")
+
+    order = frappe.get_doc("Order", order_name)
+    order.status = order_status
+
+    if webhook_shipper_awb:
+        order.awb = webhook_shipper_awb
+
+    notify_order_status(
+        name=order_name,
+        customer=order.customer,
+        status=order_status,
+        awb=webhook_shipper_awb,
+    )
+
     order.save(ignore_permissions=True)
