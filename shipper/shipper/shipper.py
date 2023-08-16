@@ -76,15 +76,13 @@ def shipper_webhook(**kwargs):
         "Order", {"shipper_order_id": webhook_shipper_order_id}
     ).as_dict()
     order_status = order.status
-    order_awb = order.awb
 
     # Update awb in order if shipper already return awb
     if (
         len(webhook_shipper_awb) > 0
         and order_status == "On Delivery"
-        and not isinstance(order_awb, str)
-    ):
-        print("update awb into order")
+        and kwargs["external_status"]["name"] == "Penjemputan Diajukan"
+    ):        
         frappe.enqueue(
             order_update,
             now=False,
@@ -92,8 +90,7 @@ def shipper_webhook(**kwargs):
             order_status=order_status,
             webhook_shipper_awb=webhook_shipper_awb,
         )
-
-    if kwargs["external_status"]["name"] == "Paket Terkirim":
+    elif kwargs["external_status"]["name"] == "Paket Terkirim":
         frappe.enqueue(
             order_update,
             now=False,
@@ -107,9 +104,6 @@ def order_update(order_name, order_status, webhook_shipper_awb=None):
 
     order = frappe.get_doc("Order", order_name)
     order.status = order_status
-
-    if webhook_shipper_awb:
-        order.awb = webhook_shipper_awb
 
     notify_order_status(
         name=order_name,
