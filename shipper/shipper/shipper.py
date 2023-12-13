@@ -20,6 +20,58 @@ class ShipperUtils:
         url = self.api_base_url + "v3/location"
         return requests.get(url, headers=self.headers, params=params)
 
+    """
+        MCP V2 Usage
+    """
+    # # -- Start separated API by segment -- # #
+    def country(self, params={}):
+        url = self.api_base_url + "v3/location/countries"
+        return requests.get(url, headers=self.headers, params=params)
+
+    def province(self, country_id=None, params={}):
+        url = self.api_base_url + f"v3/location/country/{country_id}/provinces"
+        return requests.get(url, headers=self.headers, params=params)
+
+    def city(self, province_id=None, city_id=None, params={}):
+        if city_id:
+            # Get one city by ID
+            url_segment = f"v3/location/city/{city_id}/"
+            params = {}
+        else:
+            # Get all cities ID
+            url_segment = f"v3/location/province/{province_id}/cities"
+
+        url = self.api_base_url + url_segment
+        return requests.get(url, headers=self.headers, params=params)
+
+    # suburb = district
+    def suburb(self, city_id=None, suburb_id=None, params={}):
+        if suburb_id:
+            # Get one suburb by ID
+            url_segment = f"v3/location/suburb/{suburb_id}/"
+            params = {}
+        else:
+            # Get all suburbs ID
+            url_segment = f"v3/location/city/{city_id}/suburbs"
+
+        url = self.api_base_url + url_segment
+        return requests.get(url, headers=self.headers, params=params)
+
+    # area = sub district
+    def area(self, suburb_id=None, area_id=None, params={}):
+        if area_id:
+            # Get one area by ID
+            url_segment = f"v3/location/area/{area_id}/"
+            params = {}
+        else:
+            # Get all areas ID
+            url_segment = f"v3/location/suburb/{suburb_id}/areas"
+
+        url = self.api_base_url + url_segment
+        return requests.get(url, headers=self.headers, params=params)
+
+    # # -- End separated API by segment -- # #
+
     def areas(self, params={}):
         url = self.api_base_url + "v3/location/areas"
         return requests.get(url, headers=self.headers, params=params)
@@ -82,7 +134,7 @@ def shipper_webhook(**kwargs):
         len(webhook_shipper_awb) > 0
         and order_status == "On Delivery"
         and kwargs["external_status"]["name"] == "Penjemputan Diajukan"
-    ):        
+    ):
         frappe.enqueue(
             order_update,
             now=False,
